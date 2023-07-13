@@ -24,3 +24,22 @@ def dashboard(request):
     return render(request, 'main/dashboard.html', context)
 
 
+def comment(request):
+    error = ''
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('comment')
+        else:
+            error = 'Is not valid'
+    tasks = Task.objects.order_by('-id')
+
+    form = TaskForm()
+    context = {
+        'form': form,
+        'error': error,
+        'title': 'Comment',
+        'tasks': tasks
+    }
+    return render(request, 'main/comment.html', context)
